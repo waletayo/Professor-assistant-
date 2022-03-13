@@ -10,7 +10,7 @@ export default (config) => {
     vm.log("Mongoose connection to mongodb shell disconnected", "");
   });
   return mongoose
-    .connect(`mongodb://127.0.0.1:27017/essay`, {
+    .connect(`${mongoDB}`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
