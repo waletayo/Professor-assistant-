@@ -2,6 +2,7 @@
 import mongoose from "mongoose";
 import vm from "v-response";
 import Q from "q";
+const { mongoDB } = require("../config/environment")();
 
 export default (config) => {
   mongoose.Promise = Q.Promise;
@@ -9,15 +10,10 @@ export default (config) => {
     vm.log("Mongoose connection to mongodb shell disconnected", "");
   });
   return mongoose
-    .connect(
-      "mongodb://127.0.0.1:27017/essay",
-      {
-        useNewUrlParser: true,
-        // useCreateIndex: true,
-        // useFindAndModify: false,
-        useUnifiedTopology: true,
-      }
-    )
+    .connect(`${mongoDB}`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
     .then(
       () => {
         vm.log("Mongoose connected to mongo shell.", "");

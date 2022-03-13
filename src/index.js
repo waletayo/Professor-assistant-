@@ -1,7 +1,8 @@
 "use strict";
 import errorHandler from "../setup/error-handler";
 import Q from "q";
-import Auth from "../src/Auth/auth.route";
+import Essay from "./Essay/essay.route";
+import Auth from "./Auth/auth.route";
 
 /**
  * The routes will add all the application defined routes
@@ -10,6 +11,7 @@ import Auth from "../src/Auth/auth.route";
  **/
 
 export default (app) => {
+  app.use("/api/v1", Essay);
   app.use("/api/v1", Auth);
   app.use("/", (req, res, next) => {
     const appErrorw = { status: 200 };

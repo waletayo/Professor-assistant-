@@ -31,6 +31,7 @@ export default (error, req, res, next) => {
     meta.developer_message = error;
   }
   if (error instanceof TypeError) {
+      console.log("error",error)
     const code = 417;
     meta.status_code = code;
     meta.error = { code, message: "Type error failed,Please try again later" };
