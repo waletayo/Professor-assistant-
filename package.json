@@ -1,0 +1,33 @@
+{
+  "name": "professor-assistant-restapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon setup/index.js"
+  },
+  "keywords": [
+    "nodejs",
+    "mongoDB"
+  ],
+  "author": "Adeeyo temitayo",
+  "license": "ISC",
+  "dependencies": {
+    "app-root-path": "^3.0.0",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "esm": "^3.2.25",
+    "express": "^4.17.3",
+    "express-rate-limit": "^6.3.0",
+    "helmet": "^5.0.2",
+    "mongoose": "^6.2.6",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "nodemon": "^2.0.15",
+    "q": "^1.5.1",
+    "v-response": "^1.1.0",
+    "winston": "^3.6.0",
+    "xss-clean": "^0.1.1"
+  }
+}
