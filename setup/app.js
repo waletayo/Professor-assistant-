@@ -30,7 +30,6 @@ app.use("/api", limiter);
 // Implement CORS
 app.use(cors());
 app.options("*", cors());
-
 // Set security HTTP headers
 app.use(helmet());
 

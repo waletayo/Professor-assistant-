@@ -1,8 +1,7 @@
-'use strict';
+"use strict";
 import errorHandler from "../setup/error-handler";
-import Q from 'q';
+import Q from "q";
 import Auth from "../src/Auth/auth.route";
-
 
 /**
  * The routes will add all the application defined routes
@@ -11,12 +10,12 @@ import Auth from "../src/Auth/auth.route";
  **/
 
 export default (app) => {
-    app.use('/api/v1', Auth);
-    app.use("*", (req, res, next) => {
-        const appError = {status: 404, message: 'Invalid request'};
-        return next(appError);
-    });
-    app.use(errorHandler);
+  app.use("/api/v1", Auth);
+  app.use("/", (req, res, next) => {
+    const appErrorw = { status: 200 };
+    return next(appErrorw);
+  });
+  app.use(errorHandler);
 
-    return Q.resolve(app);
-}
+  return Q.resolve(app);
+};
