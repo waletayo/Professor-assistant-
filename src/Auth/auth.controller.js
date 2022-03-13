@@ -1,24 +1,68 @@
-const User = require("./auth.model");
+const {
+  findUserByParams,
+  createUser,
+  findUserByParamsWithPassword,
+} = require("./auth.data.access");
+const bcrypt = require("bcrypt");
 
+const {
+  OK,
+  BAD_REQUEST,
+  NOT_FOUND,
+  CREATED,
+  CONFLICT,
+} = require("../../utils/status-code");
 const adaptRequest = require("../../utils/adapt-request");
 const logger = require("../../config/winston");
-const { checkFileExtension } = require("../../utils/helper");
+const vm = require("v-response");
+const { createToken } = require("../../config/jwt");
 
-exports.compareStudentEssay = (req, res, next) => {
+exports.CreateAccount = async (req, res, next) => {
   const httpRequest = adaptRequest(req);
-  const { body, files } = httpRequest;
-  const selectedFile = Object.values(files);
-//   console.log("files",selectedFile);
-  for (let i = 0; i < selectedFile.length; i++) {
-    console.log("files", selectedFile);
-    const fileName = selectedFile[i].originalname;
-    const fileType = checkFileExtension(fileName);
-    console.log("fileType", fileType);
-
-    if (fileType.toLowerCase() != "txt") {
-      console.log("invalid file type");
-    }
-    console.log("nnooooo");
+  const { body } = httpRequest;
+  const checkEmail = await findUserByParams({ email: body?.email });
+  if (checkEmail) {
+    return res
+      .status(CONFLICT)
+      .json(vm.ApiResponse(false, CONFLICT, "Email Already exist"));
   }
-  console.log("not");
+  const createNewUser = await createUser(body);
+  if (!createNewUser) {
+    return res
+      .status(BAD_REQUEST)
+      .json(vm.ApiResponse(false, BAD_REQUEST, "Oops! an error occur"));
+  }
+  const token = createToken(createNewUser);
+  return res.status(OK).json(
+    vm.ApiResponse(true, CREATED, "Success", {
+      user: createNewUser,
+      token: token,
+    })
+  );
+};
+
+exports.login = async (req, res) => {
+  const httpRequest = adaptRequest(req);
+  const {
+    body: { password, email },
+  } = httpRequest;
+  const checkEmail = await findUserByParamsWithPassword({ email });
+  if (!checkEmail) {
+    return res
+      .status(CONFLICT)
+      .json(vm.ApiResponse(false, CONFLICT, "Incorrect email or password"));
+  }
+  const comparePassword = await bcrypt.compare(password, checkEmail?.password);
+  if (!comparePassword) {
+    return res
+      .status(BAD_REQUEST)
+      .json(vm.ApiResponse(false, BAD_REQUEST, "Incorrect email or password"));
+  }
+  const token = createToken(checkEmail);
+  return res.status(OK).json(
+    vm.ApiResponse(true, CREATED, "Success", {
+      user: checkEmail,
+      token: token,
+    })
+  );
 };
