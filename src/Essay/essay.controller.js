@@ -25,6 +25,18 @@ exports.compareStudentEssay = async (req, res, next) => {
     const { body, files } = httpRequest;
     const studentOneFile = files?.student_one_file[0];
     const studentTwoFile = files?.student_two_file[0];
+    const checkFileType = checkFileExtension(studentOneFile, studentTwoFile);
+    if (!checkFileType) {
+      return res
+        .status(BAD_REQUEST)
+        .json(
+          vm.ApiResponse(
+            false,
+            BAD_REQUEST,
+            "Invalid file type,please select a txt file"
+          )
+        );
+    }
     const [essayOne, essayTwo] = await Promise.all([
       readFile(`${studentOneFile.path}`),
       readFile(`${studentTwoFile.path}`),
@@ -51,6 +63,7 @@ exports.compareStudentEssay = async (req, res, next) => {
   }
 };
 
+
 exports.reTryEssayComparison = async (req, res, next) => {
   try {
     const httpRequest = adaptRequest(req);
@@ -62,7 +75,6 @@ exports.reTryEssayComparison = async (req, res, next) => {
         .status(BAD_REQUEST)
         .json(vm.ApiResponse(false, BAD_REQUEST, "Incomplete payload"));
     }
-    console.log("essayId", essayId);
     const findEssay = await findEssayByParams({ _id: essayId });
     if (!findEssay) {
       return res
