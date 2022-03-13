@@ -9,6 +9,7 @@ export default (config) => {
   mongoose.connection.on("disconnected", function () {
     vm.log("Mongoose connection to mongodb shell disconnected", "");
   });
+  console.log("mongoDB",mongoDB)
   return mongoose
     .connect(`${mongoDB}`, {
       useNewUrlParser: true,
