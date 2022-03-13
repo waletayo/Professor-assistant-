@@ -9,9 +9,9 @@ const environmentConfig = () => {
     default:
       envConfig = {
         mongoDB:
-          process.env.MONGODB_URL_DEV || "mongodb+srv://waletayo:walex3913@momoney.lsjon.mongodb.net/momoney",
+          process.env.MONGODB_URL_DEV,
         port: process.env.PORT,
-        jwtSecret: process.env.JWT_SECRET || "jwt",
+        jwtSecret: process.env.JWT_SECRET,
       };
       break;
   }
